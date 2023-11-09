@@ -10,11 +10,11 @@ type CsvDataReader struct {
 	Records []string
 }
 
-func NewCsvLoader() *CsvDataReader {
+func NewCsvDataReader() *CsvDataReader {
 	return &CsvDataReader{}
 }
 
-func (csvl *CsvDataReader) Load(path string) error {
+func (csvl *CsvDataReader) Read(path string) error {
 	file, err := os.ReadFile(path)
 	if err != nil {
 		return err
