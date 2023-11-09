@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/alehenestroza/stori-backend-challenge/internal/reader"
+	"github.com/alehenestroza/stori-backend-challenge/internal/parser"
 )
 
 type config struct {
@@ -15,8 +18,10 @@ type config struct {
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
+	config    config
+	logger    *slog.Logger
+	csvLoader reader.CsvDataReader
+	parser    parser.TransactionParser
 }
 
 func main() {
@@ -29,8 +34,10 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	app := &application{
-		config: cfg,
-		logger: logger,
+		config:    cfg,
+		logger:    logger,
+		csvLoader: *reader.NewCsvDataReader(),
+		parser:    parser.NewTransactionParser(),
 	}
 
 	srv := &http.Server{
