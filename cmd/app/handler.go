@@ -7,6 +7,11 @@ import (
 	"github.com/alehenestroza/stori-backend-challenge/internal/transaction"
 )
 
+func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "status: available")
+	fmt.Fprintf(w, "environment: %s\n", app.config.env)
+}
+
 func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
 	app.csvLoader.Read("./txns.csv")
 
