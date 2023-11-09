@@ -17,17 +17,20 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 
 	records, err := app.csvLoader.GetRecords()
 	if err != nil {
-		fmt.Print(err)
+		app.logger.Error("could not read records", err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	transactions, err := app.parser.Parse(records)
 	if err != nil {
-		fmt.Print(err)
+		app.logger.Error("could not parse transactions", err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	summary, err := transaction.NewMonthlySummary(transactions, "July")
 	if err != nil {
-		fmt.Print(err)
+		app.logger.Error("could not build monthly summary", err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	fmt.Printf("Summary: %v", summary)
