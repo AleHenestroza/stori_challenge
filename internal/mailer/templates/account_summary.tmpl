@@ -1,0 +1,41 @@
+{{define "subject"}}Your Stori Account balance{{end}}
+
+{{define "plainBody"}}
+    Hi,
+
+    Thanks for using Stori Card. This is your current account balance.
+
+    Total balance is {{.TotalBalance}}
+    
+    Your monthly balance was: 
+    {{.MonthlySummary}}
+    
+    Average debit amount: {{.AverageDebitAmount}}
+    Average credit amount: {{.AverageCreditAmount}}
+
+    Best regards,
+
+    The Stori Team
+{{end}}
+
+{{define "htmlBody"}}
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p>Hi,</p>
+        <p>Thanks for using Stori Card. This is your current account balance.</p>
+        <p>Total balance is {{.TotalBalance}}</p>
+        <p>Your monthly balance was:</p>
+        {{.ULMonthlySummary}}
+        <p>Average debit amount: {{.AverageDebitAmount}}</p
+        <p>Average credit amount: {{.AverageCreditAmount}}</p>
+        <p>Best regards,</p>
+
+        <p>The Stori Team</p>
+    </body>
+</html>
+{{end}}
