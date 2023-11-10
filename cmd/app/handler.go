@@ -13,6 +13,7 @@ func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO: Refactor this handler
 	app.csvLoader.Read("./txns.csv")
 
 	records, err := app.csvLoader.GetRecords()
@@ -27,9 +28,27 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	summary, err := transaction.NewMonthlySummary(transactions, "July")
+	summary := transaction.NewAccountSummary(transactions)
 	if err != nil {
 		app.logger.Error("could not build monthly summary", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	accountSummary := app.formater.FormatTransactions(summary.MonthlySummary)
+
+	err = app.mailer.Send("alehenestroza@gmail.com", "account_summary.tmpl", struct {
+		TotalBalance        string
+		AccountSummary      []string
+		AverageDebitAmount  string
+		AverageCreditAmount string
+	}{
+		TotalBalance:        summary.Balance,
+		AccountSummary:      accountSummary,
+		AverageDebitAmount:  summary.DebitAverage,
+		AverageCreditAmount: summary.CreditAverage,
+	})
+	if err != nil {
+		app.logger.Error("could not send email", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
