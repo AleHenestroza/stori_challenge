@@ -21,13 +21,14 @@ func TestCsvLoaderLoad(t *testing.T) {
 
 	loader := reader.NewCsvDataReader()
 
-	if err := loader.Read(tmpFile.Name()); err != nil {
+	records, err := loader.Read(tmpFile.Name())
+	if err != nil {
 		t.Errorf("unable to load file: %v", err)
 	}
 
 	expected := []string{"value1,value2", "value3,value4"}
-	if !compareSlices(loader.Records, expected) {
-		t.Errorf("got %v but expected %v", loader.Records, expected)
+	if !compareSlices(records, expected) {
+		t.Errorf("got %v but expected %v", records, expected)
 	}
 }
 
