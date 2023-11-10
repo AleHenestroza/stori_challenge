@@ -1,56 +1,72 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/transaction"
 )
 
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "status: available")
-	fmt.Fprintf(w, "environment: %s\n", app.config.env)
+	env := envelope{
+		"status": "available",
+		"system_info": map[string]string{
+			"environment": app.config.env,
+			"version":     "1.0.0",
+		},
+	}
+
+	err := app.writeJSON(w, http.StatusOK, env, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
 }
 
 func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Refactor this handler
-	app.csvLoader.Read("./txns.csv")
-
-	records, err := app.csvLoader.GetRecords()
-	if err != nil {
-		app.logger.Error("could not read records", err)
-		w.WriteHeader(http.StatusInternalServerError)
+	var input struct {
+		Email string `json:"email"`
+		Name  string `json:"name"`
 	}
 
-	transactions, err := app.parser.Parse(records)
-	if err != nil {
-		app.logger.Error("could not parse transactions", err)
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-
-	summary := transaction.NewAccountSummary(transactions)
-	if err != nil {
-		app.logger.Error("could not build monthly summary", err)
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-
-	accountSummary := app.formater.FormatTransactions(summary.MonthlySummary)
-
-	err = app.mailer.Send("alehenestroza@gmail.com", "account_summary.tmpl", struct {
+	type emailFields struct {
+		ClientName          string
 		TotalBalance        string
 		AccountSummary      []string
 		AverageDebitAmount  string
 		AverageCreditAmount string
-	}{
+	}
+
+	err := app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+	}
+
+	records, err := app.csvLoader.Read("./txns.csv")
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+
+	transactions, err := app.parser.Parse(records)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+
+	summary := transaction.NewAccountSummary(transactions)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+
+	accountSummary := app.formater.FormatTransactions(summary.MonthlySummary)
+
+	err = app.mailer.Send(input.Email, "account_summary.tmpl", emailFields{
+		ClientName:          input.Name,
 		TotalBalance:        summary.Balance,
 		AccountSummary:      accountSummary,
 		AverageDebitAmount:  summary.DebitAverage,
 		AverageCreditAmount: summary.CreditAverage,
 	})
 	if err != nil {
-		app.logger.Error("could not send email", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		app.serverErrorResponse(w, r, err)
 	}
 
-	fmt.Printf("Summary: %v", summary)
+	w.WriteHeader(http.StatusAccepted)
 }
