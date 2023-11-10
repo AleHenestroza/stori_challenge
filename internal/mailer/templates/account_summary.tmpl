@@ -8,7 +8,7 @@
     Total balance is {{.TotalBalance}}
     
     Your monthly balance was: 
-    {{.MonthlySummary}}
+    {{.AccountSummary}}
     
     Average debit amount: {{.AverageDebitAmount}}
     Average credit amount: {{.AverageCreditAmount}}
@@ -30,7 +30,11 @@
         <p>Thanks for using Stori Card. This is your current account balance.</p>
         <p>Total balance is {{.TotalBalance}}</p>
         <p>Your monthly balance was:</p>
-        {{.MonthlySummary}}
+        <ul>
+            {{range .AccountSummary}}
+            <li>{{.}}</li>
+            {{end}}
+        </ul>
 
         <p>Average debit amount: {{.AverageDebitAmount}}</p>
         <p>Average credit amount: {{.AverageCreditAmount}}</p>
