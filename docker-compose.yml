@@ -9,12 +9,14 @@ services:
       - SMTP_SENDER=${SMTP_SENDER}
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
+      - STORI_DB_DSN=postgres://stori:stori@db/stori?sslmode=disable
     ports:
       - 4000:4000
     restart: on-failure
     depends_on:
       db:
         condition: service_healthy
+
   db:
     image: postgres:16.0
     container_name: stori_postgres
