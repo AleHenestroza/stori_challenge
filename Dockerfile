@@ -1,5 +1,3 @@
-#syntax=docker/dockerfile:1
-
 FROM golang:1.21
 
 # Set working directory
@@ -11,8 +9,8 @@ RUN go mod download && go mod verify
 
 # Build application
 COPY . .
-RUN go build -o /usr/local/bin/app ./...
+RUN go build -o ./bin ./...
 
 EXPOSE 4000
 
-CMD ["app"]
+CMD [ "/app/bin/app" ]
