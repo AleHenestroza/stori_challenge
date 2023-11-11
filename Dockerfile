@@ -13,4 +13,4 @@ RUN go build -o ./bin ./...
 
 EXPOSE 4000
 
-CMD [ "/app/bin/app" ]
+ENTRYPOINT [ "/app/bin/app" ]
