@@ -176,16 +176,16 @@ span.MsoHyperlinkFollowed {
                   <td align="left" style="padding:0;Margin:0;width:560px">
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td align="left" bgcolor="#efefef" style="padding:0;Margin:0;padding-right:25px;padding-left:25px"><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">Your monthly summary is:</p><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px"></p>
+                      <td align="left" style="padding:0;Margin:0;padding-right:25px;padding-left:25px"><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px">Your monthly summary is:</p><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px"></p>
                        <table cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%" class="es-table">
                          <tr>
                           <td style="padding:0;Margin:0">Month</td>
                           <td style="padding:0;Margin:0">Transactions</td>
                          </tr>
-                         {{range $key, $value := .AccountSummary}}
+                         {{range $key, $value := .AccountSummary.MonthlySummary}}
                          <tr>
-                          <td style="padding:0;Margin:0">{{$key}}</td>
-                          <td style="padding:0;Margin:0">{{$value}}</td>
+                          <td style="padding:0;Margin:0">Number of transactions in {{$value.Month}}</td>
+                          <td style="padding:0;Margin:0">{{$value.Transactions}}</td>
                          </tr>
                          {{end}}
                        </table><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;letter-spacing:0;color:#333333;font-size:14px"></p></td>

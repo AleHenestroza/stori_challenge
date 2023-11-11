@@ -25,7 +25,7 @@ func (tp TransactionParser) Parse(rows []string) ([]transaction.Transaction, err
 
 		transactions[i] = transaction.Transaction{
 			Id:     int32(id),
-			Date:   date,
+			Date:   tp.formatDate(date),
 			Amount: float32(amount),
 		}
 	}
@@ -52,4 +52,11 @@ func (tp TransactionParser) parseRow(row string) (int32, string, float32, error)
 	}
 
 	return int32(id), date, float32(amount), nil
+}
+
+func (tp TransactionParser) formatDate(date string) string {
+	parts := strings.Split(date, "/")
+	parts[0] = fmt.Sprintf("%02s", parts[0])
+	parts[1] = fmt.Sprintf("%02s", parts[1])
+	return strings.Join(parts, "/")
 }

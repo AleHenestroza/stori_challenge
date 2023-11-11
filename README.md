@@ -36,7 +36,7 @@ This endpoint will process the provided `txns.csv` file and will send an email w
 
 ## To-Do
 
--   [ ] Add Stori logo to email template
+-   [X] Add Stori logo to email template
 -   [ ] Implement a database for storing summaries
 -   [ ] Allow saving monthly/account summaries to a database
 -   [ ] Refactor Dockerfile for multi-stage building of the application

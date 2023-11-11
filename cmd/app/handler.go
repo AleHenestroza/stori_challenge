@@ -30,7 +30,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	type emailFields struct {
 		AccountName         string
 		TotalBalance        string
-		AccountSummary      map[string]int
+		AccountSummary      transaction.AccountSummary
 		AverageDebitAmount  string
 		AverageCreditAmount string
 	}
@@ -55,12 +55,10 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 		app.serverErrorResponse(w, r, err)
 	}
 
-	accountSummary := app.formater.FormatTransactions(summary.MonthlySummary)
-
 	err = app.mailer.Send(input.Email, "account_summary.tmpl", emailFields{
 		AccountName:         input.Name,
 		TotalBalance:        summary.Balance,
-		AccountSummary:      accountSummary,
+		AccountSummary:      summary,
 		AverageDebitAmount:  summary.DebitAverage,
 		AverageCreditAmount: summary.CreditAverage,
 	})
