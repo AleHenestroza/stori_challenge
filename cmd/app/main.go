@@ -34,7 +34,6 @@ type application struct {
 	csvLoader reader.CsvDataReader
 	parser    parser.TransactionParser
 	mailer    mailer.Mailer
-	formater  mailer.Formater
 }
 
 func main() {
@@ -48,7 +47,6 @@ func main() {
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	formater := mailer.NewFormater()
 	mailer := mailer.New(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender)
 
 	app := &application{
@@ -57,7 +55,6 @@ func main() {
 		csvLoader: *reader.NewCsvDataReader(),
 		parser:    parser.NewTransactionParser(),
 		mailer:    mailer,
-		formater:  formater,
 	}
 
 	srv := &http.Server{

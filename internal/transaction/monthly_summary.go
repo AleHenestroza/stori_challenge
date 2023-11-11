@@ -5,12 +5,12 @@ import (
 )
 
 type MonthlySummary struct {
-	Month        string
+	Month        time.Month
 	Balance      float32
 	Transactions int
 }
 
-func NewMonthlySummary(txns []Transaction, month string, transactions int) (MonthlySummary, error) {
+func NewMonthlySummary(txns []Transaction, month time.Month, transactions int) (MonthlySummary, error) {
 	balance, err := calculateMonthlyBalance(txns, month)
 	if err != nil {
 		return MonthlySummary{}, err
@@ -25,7 +25,7 @@ func NewMonthlySummary(txns []Transaction, month string, transactions int) (Mont
 	return summary, nil
 }
 
-func calculateMonthlyBalance(txns []Transaction, month string) (float32, error) {
+func calculateMonthlyBalance(txns []Transaction, month time.Month) (float32, error) {
 	var totalBalance float32
 
 	for _, t := range txns {
@@ -34,12 +34,7 @@ func calculateMonthlyBalance(txns []Transaction, month string) (float32, error) 
 			return 0, err
 		}
 
-		m, err := time.Parse("January", month)
-		if err != nil {
-			return 0, err
-		}
-
-		if date.Month() == m.Month() {
+		if date.Month() == month {
 			totalBalance += t.Amount
 		}
 	}

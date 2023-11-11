@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"fmt"
+	"slices"
 	"time"
 )
 
@@ -44,7 +45,7 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 	}
 
 	for month := range monthMap {
-		monthlySummary, err := NewMonthlySummary(monthMap[month], month.String(), len(monthMap[month]))
+		monthlySummary, err := NewMonthlySummary(monthMap[month], month, len(monthMap[month]))
 		if err != nil {
 			fmt.Printf("Error al crear el resumen mensual para %s: %v\n", month, err)
 			continue
@@ -53,9 +54,21 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 		summary.MonthlySummary = append(summary.MonthlySummary, monthlySummary)
 	}
 
+	slices.SortFunc(summary.MonthlySummary, func(a, b MonthlySummary) int {
+		if a.Month > b.Month {
+			return 1
+		}
+
+		if a.Month < b.Month {
+			return -1
+		}
+
+		return 0
+	})
+
 	summary.Balance = fmt.Sprintf("%.2f", balance)
-	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount / float32(credits))
-	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount / float32(debits))
+	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float32(credits))
+	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float32(debits))
 
 	return summary
 }
