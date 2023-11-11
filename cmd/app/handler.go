@@ -28,7 +28,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	}
 
 	type emailFields struct {
-		ClientName          string
+		AccountName         string
 		TotalBalance        string
 		AccountSummary      []string
 		AverageDebitAmount  string
@@ -58,7 +58,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	accountSummary := app.formater.FormatTransactions(summary.MonthlySummary)
 
 	err = app.mailer.Send(input.Email, "account_summary.tmpl", emailFields{
-		ClientName:          input.Name,
+		AccountName:         input.Name,
 		TotalBalance:        summary.Balance,
 		AccountSummary:      accountSummary,
 		AverageDebitAmount:  summary.DebitAverage,

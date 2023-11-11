@@ -1,7 +1,7 @@
 {{define "subject"}}Your Stori Account balance{{end}}
 
 {{define "plainBody"}}
-    Hi,
+    Hi {{.AccountName}},
 
     Thanks for using Stori Card. This is your current account balance.
 
@@ -26,7 +26,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
-        <p>Hi,</p>
+        <p>Hi {{.AccountName}},</p>
         <p>Thanks for using Stori Card. This is your current account balance.</p>
         <p>Total balance is {{.TotalBalance}}</p>
         <p>Your monthly balance was:</p>
