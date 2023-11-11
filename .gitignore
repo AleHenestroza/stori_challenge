@@ -1,2 +1,4 @@
 ./bin/*
 .run.sh
+run.sh
+build.sh
