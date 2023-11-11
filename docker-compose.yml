@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  api:
+    container_name: stori_app
+    build: .
+    environment:
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_SENDER=${SMTP_SENDER}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+    ports:
+      - 4000:4000
+    restart: on-failure
