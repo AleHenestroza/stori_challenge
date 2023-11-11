@@ -30,7 +30,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	type emailFields struct {
 		AccountName         string
 		TotalBalance        string
-		AccountSummary      []string
+		AccountSummary      map[string]int
 		AverageDebitAmount  string
 		AverageCreditAmount string
 	}
