@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/mailer"
@@ -41,14 +42,9 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|production)")
-
-	flag.StringVar(&cfg.smtp.host, "smtp-host", "sandbox.smtp.mailtrap.io", "SMTP host")
-	flag.IntVar(&cfg.smtp.port, "smtp-port", 2525, "SMTP port")
-	flag.StringVar(&cfg.smtp.username, "smtp-username", "<username>", "SMTP username")
-	flag.StringVar(&cfg.smtp.password, "smtp-password", "<password>", "SMTP password")
-	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "Stori Test <no-reply@storitest.com>", "SMTP sender")
-
 	flag.Parse()
+
+	cfg.smtp = buildSmtpStruct()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
@@ -77,4 +73,48 @@ func main() {
 	err := srv.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)
+}
+
+func buildSmtpStruct() smtp {
+	smtpHost, err := getEnv("SMTP_HOST")
+	if err != nil {
+		panic(err)
+	}
+	smtpPortStr, err := getEnv("SMTP_PORT")
+	if err != nil {
+		panic(err)
+	}
+	smtpPort, err := strconv.Atoi(smtpPortStr)
+	if err != nil {
+		panic(err)
+	}
+	smtpUsername, err := getEnv("SMTP_USERNAME")
+	if err != nil {
+		panic(err)
+	}
+	smtpPassword, err := getEnv("SMTP_PASSWORD")
+	if err != nil {
+		panic(err)
+	}
+	smtpSender, err := getEnv("SMTP_SENDER")
+	if err != nil {
+		panic(err)
+	}
+
+	smtp := smtp{
+		host:     smtpHost,
+		port:     smtpPort,
+		username: smtpUsername,
+		password: smtpPassword,
+		sender:   smtpSender,
+	}
+
+	return smtp
+}
+
+func getEnv(key string) (string, error) {
+	if value, exists := os.LookupEnv(key); exists {
+		return value, nil
+	}
+	return "", fmt.Errorf("could not read key %s", key)
 }
