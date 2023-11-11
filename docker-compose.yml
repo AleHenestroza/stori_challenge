@@ -12,3 +12,26 @@ services:
     ports:
       - 4000:4000
     restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16.0
+    container_name: stori_postgres
+    environment:
+      - PGUSER=stori
+      - POSTGRES_PASSWORD=stori
+      - POSTGRES_DATABASE=stori
+    ports:
+      - 5432:5432
+    volumes:
+      - stori_pg_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "stori", "-d", "stori"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+volumes:
+  stori_pg_db:
