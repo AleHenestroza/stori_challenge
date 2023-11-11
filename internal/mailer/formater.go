@@ -2,7 +2,6 @@ package mailer
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/transaction"
 )
@@ -13,16 +12,12 @@ func NewFormater() Formater {
 	return Formater{}
 }
 
-func (f Formater) FormatTransactions(txns []transaction.MonthlySummary) []string {
-	var listItems []string
+func (f Formater) FormatTransactions(txns []transaction.MonthlySummary) map[string]int {
+	items := make(map[string]int, 12)
 
 	for _, summary := range txns {
-		transactionsStr := strconv.Itoa(summary.Transactions)
-
-		li := fmt.Sprintf("Number of transactions in %s: %s", summary.Month, transactionsStr)
-
-		listItems = append(listItems, li)
+		items[fmt.Sprintf("Number of transactions in %s", summary.Month)] = summary.Transactions
 	}
 
-	return listItems
+	return items
 }

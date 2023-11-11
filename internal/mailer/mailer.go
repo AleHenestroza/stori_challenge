@@ -59,9 +59,9 @@ func (m Mailer) Send(recipient, templateFile string, data any) error {
     msg.AddAlternative("text/html", htmlBody.String())
 
 	err = m.dialer.DialAndSend(msg)
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
