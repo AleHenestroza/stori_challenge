@@ -2,20 +2,6 @@
 
 This app is the solution to [Stori's Backend Challenge](Tech_Challenge_-_Software_Engineer.pdf). The application was developed using Go and Docker.
 
-## Run the application
-
-In order to run this application, you need to have Docker installed. You can build the application with the following command:
-
-```sh
-docker build --label storichallenge .
-```
-
-And then you can run the application with:
-
-```sh
-docker run -p 4000:4000 -e SMTP_HOST=sandbox.smtp.mailtrap.io -e SMTP_PORT=2525 -e SMTP_USERNAME=<your-username> -e SMTP_PASSWORD=<your-password> -e SMTP_SENDER="Stori Test <no-reply@storitest.com>" storichallenge
-```
-
 ## SMTP
 
 The application was developed using [mailtrap](https://mailtrap.io). Mailtrap is a free application that allows you to test sending emails by creating a private inbox to which each email will be sent. This means that no email will actually be sent to real email addresses.
@@ -23,6 +9,16 @@ The application was developed using [mailtrap](https://mailtrap.io). Mailtrap is
 You can create a free account and change the environment variables `SMTP_USERNAME` and `SMTP_PASSWORd` with your own credentials.
 
 Alternatively, if you already own a SMTP service, you can also change the `SMTP_HOST`, `SMTP_PORT` and `SMTP_SENDER` with your own.
+
+## Run the application
+
+This application is packaged with a docker-compose solution. In order to run the application, you need to have [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/). Docker Compose is integrated with the new versions of [Docker Desktop](https://docs.docker.com/desktop/). If you are not using Docker Desktop, you can install both Docker and Docker Compose using a package manager like [Homebrew](https://brew.sh/), or native package managers like `apt`, `dnf`, `pacman` (for Linux distributions).
+
+To run the application, you need to configure an `.env` file with the necessary environment variables. An `.env_example` file is provided. After setting the correct variables, you can simply run the application with the following command:
+
+```sh
+docker-compose up
+```
 
 ## Endpoints
 
