@@ -1,4 +1,4 @@
-package transaction
+package data
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 
 type MonthlySummary struct {
 	Month        time.Month
-	Balance      float32
+	Balance      float64
 	Transactions int
 }
 
@@ -25,16 +25,11 @@ func NewMonthlySummary(txns []Transaction, month time.Month, transactions int) (
 	return summary, nil
 }
 
-func calculateMonthlyBalance(txns []Transaction, month time.Month) (float32, error) {
-	var totalBalance float32
+func calculateMonthlyBalance(txns []Transaction, month time.Month) (float64, error) {
+	var totalBalance float64
 
 	for _, t := range txns {
-		date, err := t.GetDate()
-		if err != nil {
-			return 0, err
-		}
-
-		if date.Month() == month {
+		if t.Date.Date().Month() == month {
 			totalBalance += t.Amount
 		}
 	}
