@@ -9,6 +9,32 @@ services:
       - SMTP_SENDER=${SMTP_SENDER}
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
+      - STORI_DB_DSN=postgres://${PG_USERNAME}:${PG_PASSWORD}@db/${PG_DATABASE}?sslmode=disable
     ports:
       - 4000:4000
     restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16.0
+    container_name: stori_postgres
+    environment:
+      - PGUSER=${PG_USERNAME}
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DATABASE=${PG_DATABASE}
+    ports:
+      - 5432:5432
+    volumes:
+      - stori_pg_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "stori", "-d", "stori"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+volumes:
+  stori_pg_db:
