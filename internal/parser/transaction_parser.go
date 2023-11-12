@@ -19,6 +19,10 @@ func (tp TransactionParser) Parse(rows []string) ([]data.Transaction, error) {
 	transactions := make([]data.Transaction, len(rows))
 
 	for i, row := range rows {
+		if isHeaderRow(row) {
+			continue
+		}
+
 		id, dateStr, amount, err := tp.parseRow(row)
 		if err != nil {
 			return nil, err
@@ -30,16 +34,16 @@ func (tp TransactionParser) Parse(rows []string) ([]data.Transaction, error) {
 		}
 
 		transactions[i] = data.Transaction{
-			Id:              int64(id),
+			Id:              id,
 			TransactionDate: data.TransactionDate(date),
-			Amount:          float64(amount),
+			Amount:          amount,
 		}
 	}
 
 	return transactions, nil
 }
 
-func (tp TransactionParser) parseRow(row string) (int32, string, float32, error) {
+func (tp TransactionParser) parseRow(row string) (int64, string, float64, error) {
 	parts := strings.Split(row, ",")
 	if len(parts) != 3 {
 		return 0, "", 0, fmt.Errorf("wrong input format")
@@ -56,8 +60,8 @@ func (tp TransactionParser) parseRow(row string) (int32, string, float32, error)
 	if err != nil {
 		return 0, "", 0, fmt.Errorf("could not parse transaction Amount")
 	}
-
-	return int32(id), date, float32(amount), nil
+	
+	return id, date, amount, nil
 }
 
 func (tp TransactionParser) parseDate(dateStr string) (time.Time, error) {
@@ -66,4 +70,10 @@ func (tp TransactionParser) parseDate(dateStr string) (time.Time, error) {
 		return time.Time{}, err
 	}
 	return date, nil
+}
+
+func isHeaderRow(row string) bool {
+	parts := strings.Split(row, ",")
+
+	return strings.EqualFold(parts[0], "Id") && strings.EqualFold(parts[1], "Date") && strings.EqualFold(parts[2], "Transaction")
 }
