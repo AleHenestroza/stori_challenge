@@ -1,0 +1,283 @@
+{
+    "info": {
+        "_postman_id": "d5debe28-d226-4ff2-9b16-090471cbba06",
+        "name": "Stori Challenge",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "v1 - Send Summary",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v1/transactions/summary",
+                    "path": [
+                        "v1",
+                        "transactions",
+                        "summary"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"alehenestroza@gmail.com\",\n  \"name\": \"Alejandro Henestroza\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Get Summary",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:4000/v2/transactions",
+                    "path": [
+                        "v2",
+                        "transactions"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Register User",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/users/register",
+                    "path": [
+                        "v2",
+                        "users",
+                        "register"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"alehenestroza\",\n  \"email\": \"alehenestroza@gmail.com\",\n  \"password\": \"abcd1234\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Activate user",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/users/activate",
+                    "path": [
+                        "v2",
+                        "users",
+                        "activate"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"token\": \"JMEXK44ITK7WIVGEMDIXZYQOPY\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Authenticate",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/auth/authenticate",
+                    "path": [
+                        "v2",
+                        "auth",
+                        "authenticate"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"alehenestroza@gmail.com\",\n  \"password\": \"abcd1234\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Save Transaction",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/transactions",
+                    "path": [
+                        "v2",
+                        "transactions"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"transaction_date\": \"2023/11/09\",\n  \"amount\": -23.57\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Save Transactions Bulk",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/transactions/bulk",
+                    "path": [
+                        "v2",
+                        "transactions",
+                        "bulk"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "file",
+                            "src": "/home/alehenestroza/Documentos/Desarrollo/stori_challenge/txns.csv",
+                            "type": "file"
+                        }
+                    ]
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "v2 - Send Summary",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/transactions/summary",
+                    "path": [
+                        "v2",
+                        "transactions",
+                        "summary"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Request Activation Token",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:4000/v2/auth/activation",
+                    "path": [
+                        "v2",
+                        "auth",
+                        "activation"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "4000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"username@email.com\"\n}"
+                }
+            }
+        }
+    ]
+}

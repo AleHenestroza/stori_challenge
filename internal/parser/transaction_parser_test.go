@@ -2,15 +2,16 @@ package parser_test
 
 import (
 	"testing"
+	"time"
 
+	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 	"github.com/alehenestroza/stori-backend-challenge/internal/parser"
-	"github.com/alehenestroza/stori-backend-challenge/internal/transaction"
 )
 
 func TestParse(t *testing.T) {
 	p := parser.NewTransactionParser()
 	rows := []string{
-		"1,1/09,100.50",
+		"1,01/09,100.50",
 		"2,11/1,50.25",
 	}
 
@@ -19,21 +20,29 @@ func TestParse(t *testing.T) {
 		t.Errorf("Parse failed with error: %v", err)
 	}
 
-	expectedTransactions := []transaction.Transaction{
-		{Id: 1, Date: "01/09", Amount: 100.50},
-		{Id: 2, Date: "11/01", Amount: 50.25},
+	expectedTransactions := []*data.Transaction{
+		{Id: 1, TransactionDate: data.TransactionDate(time.Date(0, 1, 9, 0, 0, 0, 0, time.UTC)), Amount: 100.50},
+		{Id: 2, TransactionDate: data.TransactionDate(time.Date(0, 11, 1, 0, 0, 0, 0, time.UTC)), Amount: 50.25},
 	}
 	if !compareTransactions(transactions, expectedTransactions) {
 		t.Errorf("Transactions mismatch. Got: %v, Expected: %v", transactions, expectedTransactions)
 	}
 }
 
-func compareTransactions(a, b []transaction.Transaction) bool {
+func compareTransactions(a, b []*data.Transaction) bool {
 	if len(a) != len(b) {
 		return false
 	}
 	for i := range a {
-		if a[i] != b[i] {
+		if a[i].Id != b[i].Id {
+			return false
+		}
+
+		if a[i].TransactionDate != b[i].TransactionDate {
+			return false
+		}
+
+		if a[i].Amount != b[i].Amount {
 			return false
 		}
 	}
