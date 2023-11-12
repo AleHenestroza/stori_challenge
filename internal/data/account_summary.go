@@ -1,4 +1,4 @@
-package transaction
+package data
 
 import (
 	"fmt"
@@ -14,18 +14,13 @@ type AccountSummary struct {
 }
 
 func NewAccountSummary(transactions []Transaction) AccountSummary {
-	var balance, debitAmount, creditAmount float32
+	var balance, debitAmount, creditAmount float64
 	var debits, credits int
 	summary := AccountSummary{}
 	monthMap := make(map[time.Month][]Transaction)
 
 	for _, t := range transactions {
-		date, err := t.GetDate()
-		if err != nil {
-			fmt.Printf("Error al crear el resumen mensual para %s: %v\n", date, err)
-		}
-
-		month := date.Month()
+		month := t.TransactionDate.Date().Month()
 
 		if _, found := monthMap[month]; !found {
 			monthMap[month] = []Transaction{}
@@ -67,8 +62,8 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 	})
 
 	summary.Balance = fmt.Sprintf("%.2f", balance)
-	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float32(credits))
-	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float32(debits))
+	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float64(credits))
+	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float64(debits))
 
 	return summary
 }

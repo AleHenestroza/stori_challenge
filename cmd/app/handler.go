@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/alehenestroza/stori-backend-challenge/internal/transaction"
+	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 )
 
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +30,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	type emailFields struct {
 		AccountName         string
 		TotalBalance        string
-		AccountSummary      transaction.AccountSummary
+		AccountSummary      data.AccountSummary
 		AverageDebitAmount  string
 		AverageCreditAmount string
 	}
@@ -38,21 +38,25 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	err := app.readJSON(w, r, &input)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
+		return
 	}
 
 	records, err := app.csvLoader.Read("./txns.csv")
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
+		return
 	}
 
 	transactions, err := app.parser.Parse(records)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
+		return
 	}
 
-	summary := transaction.NewAccountSummary(transactions)
+	summary := data.NewAccountSummary(transactions)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
+		return
 	}
 
 	err = app.mailer.Send(input.Email, "account_summary.tmpl", emailFields{
@@ -64,7 +68,27 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 	})
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
+		return
 	}
 
 	w.WriteHeader(http.StatusAccepted)
+}
+
+func (app *application) sendTransactionSummaryHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	txns, err := app.models.Transactions.GetAll(id)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"transactions": txns}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
 }
