@@ -109,3 +109,29 @@ func (app *application) saveTransactionHandler(w http.ResponseWriter, r *http.Re
 
 	w.WriteHeader(http.StatusCreated)
 }
+
+func (app *application) saveTransactionsHandler(w http.ResponseWriter, r *http.Request) {
+	user := app.contextGetUser(r)
+	rows, err := app.readCSVFile(w, r)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	transactions, err := app.parser.Parse(rows)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	for _, t := range transactions {
+		t.UserID = user.ID
+		err = app.models.Transactions.Insert(&t)
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}

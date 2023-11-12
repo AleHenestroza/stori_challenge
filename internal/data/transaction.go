@@ -98,3 +98,37 @@ func (t TransactionModel) GetAll(id int64) ([]*Transaction, error) {
 
 	return transactions, nil
 }
+
+func (t TransactionModel) InsertMultiple(transactions []*Transaction) error {
+	tx, err := t.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	for _, transaction := range transactions {
+		query := `
+			INSERT INTO transactions (txn_date, amount, user_id)
+			VALUES ($1, $2, $3)
+			RETURNING id, txn_date, amount, user_id, created_at`
+
+		args := []any{time.Time(transaction.TransactionDate), transaction.Amount, transaction.UserID}
+
+		err = tx.QueryRowContext(ctx, query, args...).Scan(&transaction.Id, &transaction.TransactionDate, &transaction.Amount, &transaction.UserID, &transaction.CreatedAt)
+
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

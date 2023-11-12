@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,6 +9,8 @@ import (
 	"net/http"
 	"strings"
 )
+
+const MaxUploadSize = 1 << 20 // 1MB
 
 type envelope map[string]any
 
@@ -81,6 +84,34 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any
 	}
 
 	return nil
+}
+
+func (app *application) readCSVFile(w http.ResponseWriter, r *http.Request) ([]string, error) {
+	r.Body = http.MaxBytesReader(w, r.Body, MaxUploadSize)
+	err := r.ParseMultipartForm(MaxUploadSize)
+	if err != nil {
+		return nil, err
+	}
+
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		return nil, err
+	}
+
+	reader := csv.NewReader(file)
+	var results []string
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, strings.Join(record, ","))
+	}
+	return results, nil
 }
 
 // func (app *application) readIDParam(r *http.Request) (int64, error) {
