@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 	"github.com/alehenestroza/stori-backend-challenge/internal/mailer"
 	"github.com/alehenestroza/stori-backend-challenge/internal/parser"
 	"github.com/alehenestroza/stori-backend-challenge/internal/reader"
@@ -44,6 +45,7 @@ type application struct {
 	csvLoader reader.CsvDataReader
 	parser    parser.TransactionParser
 	mailer    mailer.Mailer
+	models    data.Models
 }
 
 func main() {
@@ -83,6 +85,7 @@ func main() {
 		csvLoader: *reader.NewCsvDataReader(),
 		parser:    parser.NewTransactionParser(),
 		mailer:    mailer,
+		models:    data.NewModels(db),
 	}
 
 	srv := &http.Server{
