@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT NOT NULL,
     email citext UNIQUE NOT NULL,
     password_hash BYTEA NOT NULL,
+    activated bool NOT NULL,
     created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS tokens (
