@@ -53,7 +53,10 @@ func (t TransactionModel) Insert(transaction *Transaction) error {
 
 	args := []any{transaction.TransactionDate, transaction.Amount, transaction.UserID}
 
-	return t.DB.QueryRow(query, args...).Scan(&transaction.Id, &transaction.TransactionDate, &transaction.Amount, &transaction.UserID, &transaction.CreatedAt)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	return t.DB.QueryRowContext(ctx, query, args...).Scan(&transaction.Id, &transaction.TransactionDate, &transaction.Amount, &transaction.UserID, &transaction.CreatedAt)
 }
 
 func (t TransactionModel) GetAll(id int64) ([]*Transaction, error) {
@@ -61,12 +64,10 @@ func (t TransactionModel) GetAll(id int64) ([]*Transaction, error) {
 		SELECT id, txn_date, amount, user_id, created_at FROM transactions t
 		WHERE t.user_id = $1`
 
-	args := []any{id}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	rows, err := t.DB.QueryContext(ctx, query, args...)
+	rows, err := t.DB.QueryContext(ctx, query, id)
 	if err != nil {
 		return nil, err
 	}
