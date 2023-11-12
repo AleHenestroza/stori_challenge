@@ -22,7 +22,9 @@ type config struct {
 	port int
 	env  string
 	smtp smtp
-	dsn  string
+	db   struct {
+		dsn string
+	}
 }
 
 type smtp struct {
@@ -46,19 +48,18 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|production)")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", os.Getenv("STORI_DB_DSN"), "PostgreSQL DSN")
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	dsn, db, err := connectDB()
+	db, err := connectDB(cfg)
 	if err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
 	}
 	defer db.Close()
 	logger.Info("database connection pool established")
-
-	cfg.dsn = dsn
 
 	smtp, err := buildSmtpStruct()
 	if err != nil {
@@ -135,15 +136,10 @@ func getEnv(key string) (string, error) {
 	return "", fmt.Errorf("could not read key %s", key)
 }
 
-func connectDB() (string, *sql.DB, error) {
-	dsn, err := getEnv("STORI_DB_DSN")
+func connectDB(cfg config) (*sql.DB, error) {
+	db, err := sql.Open("postgres", cfg.db.dsn)
 	if err != nil {
-		return "", nil, err
-	}
-
-	db, err := sql.Open("postgres", dsn)
-	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -151,8 +147,8 @@ func connectDB() (string, *sql.DB, error) {
 
 	err = db.PingContext(ctx)
 	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
 
-	return dsn, db, nil
+	return db, nil
 }
