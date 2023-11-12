@@ -51,7 +51,7 @@ func (t TransactionModel) Insert(transaction *Transaction) error {
 		VALUES ($1, $2, $3)
 		RETURNING id, txn_date, amount, user_id, created_at`
 
-	args := []any{transaction.TransactionDate, transaction.Amount, transaction.UserID}
+	args := []any{time.Time(transaction.TransactionDate), transaction.Amount, transaction.UserID}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
