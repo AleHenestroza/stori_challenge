@@ -17,8 +17,8 @@ func NewMonthlySummary(txns []Transaction, month time.Month, transactions int) (
 	}
 
 	summary := MonthlySummary{
-		Month:   month,
-		Balance: balance,
+		Month:        month,
+		Balance:      balance,
 		Transactions: transactions,
 	}
 
@@ -29,7 +29,7 @@ func calculateMonthlyBalance(txns []Transaction, month time.Month) (float64, err
 	var totalBalance float64
 
 	for _, t := range txns {
-		if t.Date.Date().Month() == month {
+		if t.TransactionDate.Date().Month() == month {
 			totalBalance += t.Amount
 		}
 	}

@@ -30,9 +30,9 @@ func (tp TransactionParser) Parse(rows []string) ([]data.Transaction, error) {
 		}
 
 		transactions[i] = data.Transaction{
-			Id:     int64(id),
-			Date:   data.TransactionDate(date),
-			Amount: float64(amount),
+			Id:              int64(id),
+			TransactionDate: data.TransactionDate(date),
+			Amount:          float64(amount),
 		}
 	}
 

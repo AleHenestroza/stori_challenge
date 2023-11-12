@@ -17,7 +17,7 @@ func TestUnmarshalTransaction(t *testing.T) {
 	}
 
 	expectedDate := time.Date(2023, 11, 12, 0, 0, 0, 0, time.UTC)
-	if time.Time(transaction.Date) != expectedDate {
-		t.Errorf("expected %v but got %v", expectedDate, transaction.Date)
+	if time.Time(transaction.TransactionDate) != expectedDate {
+		t.Errorf("expected %v but got %v", expectedDate, transaction.TransactionDate)
 	}
 }

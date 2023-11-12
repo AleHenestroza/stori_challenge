@@ -21,8 +21,8 @@ func TestParse(t *testing.T) {
 	}
 
 	expectedTransactions := []data.Transaction{
-		{Id: 1, Date: data.TransactionDate(time.Date(0, 1, 9, 0, 0, 0, 0, time.UTC)), Amount: 100.50},
-		{Id: 2, Date: data.TransactionDate(time.Date(0, 11, 1, 0, 0, 0, 0, time.UTC)), Amount: 50.25},
+		{Id: 1, TransactionDate: data.TransactionDate(time.Date(0, 1, 9, 0, 0, 0, 0, time.UTC)), Amount: 100.50},
+		{Id: 2, TransactionDate: data.TransactionDate(time.Date(0, 11, 1, 0, 0, 0, 0, time.UTC)), Amount: 50.25},
 	}
 	if !compareTransactions(transactions, expectedTransactions) {
 		t.Errorf("Transactions mismatch. Got: %v, Expected: %v", transactions, expectedTransactions)

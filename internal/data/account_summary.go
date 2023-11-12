@@ -20,7 +20,7 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 	monthMap := make(map[time.Month][]Transaction)
 
 	for _, t := range transactions {
-		month := t.Date.Date().Month()
+		month := t.TransactionDate.Date().Month()
 
 		if _, found := monthMap[month]; !found {
 			monthMap[month] = []Transaction{}
