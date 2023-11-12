@@ -30,7 +30,7 @@ docker-compose up
 > In some cases, MailTrap configuration will difer from inbox to inbox in more than just the username and password. In some cases, an alternative port of 25 will need to be used. Before setting the environment variables, and if using Mailtrap as the SMTP server, please double check that the host and the port are also correct.
 
 > [!WARNING]
-> In some cases, if a postgresql image was already donwloaded and ran, there may be a data volume that may interfere with the initialization of the database. In order to fix this issue, you can run `docker-compose down -v` and then `docker-compose up`
+> In some cases, if a PostgreSQL image has already been downloaded and run, there may be a volume of data that can interfere with database initialization. In order to fix this issue, you can run `docker-compose down -v` and then `docker-compose up`.
 
 ## Endpoints
 
