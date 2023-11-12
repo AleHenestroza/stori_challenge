@@ -16,5 +16,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/v1/transactions/summary", app.transactionsSummaryHandler)
 	router.HandlerFunc(http.MethodGet, "/v2/transactions/summary/:id", app.sendTransactionSummaryHandler)
 
+	router.HandlerFunc(http.MethodPost, "/v2/users/register", app.registerUserHandler)
+
 	return app.recoverPanic(router)
 }
