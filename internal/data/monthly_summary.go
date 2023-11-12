@@ -10,7 +10,7 @@ type MonthlySummary struct {
 	Transactions int
 }
 
-func NewMonthlySummary(txns []Transaction, month time.Month, transactions int) (MonthlySummary, error) {
+func NewMonthlySummary(txns []*Transaction, month time.Month, transactions int) (MonthlySummary, error) {
 	balance, err := calculateMonthlyBalance(txns, month)
 	if err != nil {
 		return MonthlySummary{}, err
@@ -25,7 +25,7 @@ func NewMonthlySummary(txns []Transaction, month time.Month, transactions int) (
 	return summary, nil
 }
 
-func calculateMonthlyBalance(txns []Transaction, month time.Month) (float64, error) {
+func calculateMonthlyBalance(txns []*Transaction, month time.Month) (float64, error) {
 	var totalBalance float64
 
 	for _, t := range txns {

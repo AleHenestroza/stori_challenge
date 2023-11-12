@@ -8,18 +8,18 @@ import (
 	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 )
 
+type emailFields struct {
+	AccountName         string
+	TotalBalance        string
+	AccountSummary      data.AccountSummary
+	AverageDebitAmount  string
+	AverageCreditAmount string
+}
+
 func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email string `json:"email"`
 		Name  string `json:"name"`
-	}
-
-	type emailFields struct {
-		AccountName         string
-		TotalBalance        string
-		AccountSummary      data.AccountSummary
-		AverageDebitAmount  string
-		AverageCreditAmount string
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -40,7 +40,7 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	summary := data.NewAccountSummary(transactions)
+	summary, err := data.NewAccountSummary(transactions)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -126,7 +126,7 @@ func (app *application) saveTransactionsHandler(w http.ResponseWriter, r *http.R
 
 	for _, t := range transactions {
 		t.UserID = user.ID
-		err = app.models.Transactions.Insert(&t)
+		err = app.models.Transactions.Insert(t)
 		if err != nil {
 			app.serverErrorResponse(w, r, err)
 			return
@@ -134,4 +134,34 @@ func (app *application) saveTransactionsHandler(w http.ResponseWriter, r *http.R
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (app *application) sendTransactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
+	user := app.contextGetUser(r)
+
+	transactions, err := app.models.Transactions.GetAll(user.ID)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	accountSummary, err := data.NewAccountSummary(transactions)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.mailer.Send(user.Email, "account_summary.tmpl", emailFields{
+		AccountName:         user.Name,
+		TotalBalance:        accountSummary.Balance,
+		AccountSummary:      accountSummary,
+		AverageDebitAmount:  accountSummary.DebitAverage,
+		AverageCreditAmount: accountSummary.CreditAverage,
+	})
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusAccepted)
 }

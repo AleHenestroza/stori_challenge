@@ -13,17 +13,17 @@ type AccountSummary struct {
 	CreditAverage  string
 }
 
-func NewAccountSummary(transactions []Transaction) AccountSummary {
+func NewAccountSummary(transactions []*Transaction) (AccountSummary, error) {
 	var balance, debitAmount, creditAmount float64
 	var debits, credits int
 	summary := AccountSummary{}
-	monthMap := make(map[time.Month][]Transaction)
+	monthMap := make(map[time.Month][]*Transaction)
 
 	for _, t := range transactions {
 		month := t.TransactionDate.Date().Month()
 
 		if _, found := monthMap[month]; !found {
-			monthMap[month] = []Transaction{}
+			monthMap[month] = []*Transaction{}
 		}
 
 		balance += t.Amount
@@ -42,8 +42,7 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 	for month := range monthMap {
 		monthlySummary, err := NewMonthlySummary(monthMap[month], month, len(monthMap[month]))
 		if err != nil {
-			fmt.Printf("Error al crear el resumen mensual para %s: %v\n", month, err)
-			continue
+			return AccountSummary{}, err
 		}
 
 		summary.MonthlySummary = append(summary.MonthlySummary, monthlySummary)
@@ -65,5 +64,5 @@ func NewAccountSummary(transactions []Transaction) AccountSummary {
 	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float64(credits))
 	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float64(debits))
 
-	return summary
+	return summary, nil
 }
