@@ -75,9 +75,15 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 }
 
 func (app *application) sendTransactionSummaryHandler(w http.ResponseWriter, r *http.Request) {
+	user := app.contextGetUser(r)
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	if user.ID != id {
+		app.notPermittedResponse(w, r)
 		return
 	}
 
