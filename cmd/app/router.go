@@ -20,6 +20,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v2/transactions", app.requireActivatedUser(app.listTransactionsHandler))
 	router.HandlerFunc(http.MethodPost, "/v2/transactions", app.requireActivatedUser(app.saveTransactionHandler))
 	router.HandlerFunc(http.MethodPost, "/v2/transactions/bulk", app.requireActivatedUser(app.saveTransactionsHandler))
+	router.HandlerFunc(http.MethodPost, "/v2/transactions/summary", app.requireActivatedUser(app.sendTransactionsSummaryHandler))
 
 	router.HandlerFunc(http.MethodPost, "/v2/users/register", app.registerUserHandler)
 	router.HandlerFunc(http.MethodPut, "/v2/users/activate", app.activateUserHandler)

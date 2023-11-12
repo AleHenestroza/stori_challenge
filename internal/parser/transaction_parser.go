@@ -15,8 +15,8 @@ func NewTransactionParser() TransactionParser {
 	return TransactionParser{}
 }
 
-func (tp TransactionParser) Parse(rows []string) ([]data.Transaction, error) {
-	transactions := make([]data.Transaction, len(rows))
+func (tp TransactionParser) Parse(rows []string) ([]*data.Transaction, error) {
+	transactions := make([]*data.Transaction, len(rows))
 
 	for i, row := range rows {
 		if isHeaderRow(row) {
@@ -33,7 +33,7 @@ func (tp TransactionParser) Parse(rows []string) ([]data.Transaction, error) {
 			return nil, err
 		}
 
-		transactions[i] = data.Transaction{
+		transactions[i] = &data.Transaction{
 			Id:              id,
 			TransactionDate: data.TransactionDate(date),
 			Amount:          amount,
