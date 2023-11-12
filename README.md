@@ -157,5 +157,5 @@ This endpoint works exactly as the first one, it will send an email with the acc
 -   [x] Add Stori logo to email template
 -   [x] Implement a database for storing summaries
 -   [x] Allow saving monthly/account summaries to a database
--   [ ] Send emails to real email accounts
+-   [X] Send emails to real email accounts (by changing environment variables and using a real SMTP server, like Gmail)
 -   [ ] Deploy on the cloud (AWS)
