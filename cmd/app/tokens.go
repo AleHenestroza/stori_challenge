@@ -115,8 +115,8 @@ func (app *application) createActivationTokenHandler(w http.ResponseWriter, r *h
 	if err != nil {
 		app.logger.Error(err.Error())
 	}
-	
-	env := envelope{"user": user, "token": token, "message": "to activate your user, send a PUT request to: /v2/users/activate/:id with this JSON body: {'token': 'your activation token'} "}
+
+	env := envelope{"user": user, "token": token, "message": "to activate your user, send a PUT request to: /v2/users/activate with this JSON body: {'token': 'your activation token'} "}
 
 	err = app.writeJSON(w, http.StatusAccepted, env, nil)
 	if err != nil {

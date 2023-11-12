@@ -58,7 +58,7 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusAccepted, envelope{"user": user, "token": token, "message": "to activate your user, send a PUT request to: /v2/users/activate/:id with this JSON body: {'token': 'your activation token'} "}, nil)
+	err = app.writeJSON(w, http.StatusAccepted, envelope{"user": user, "token": token, "message": "to activate your user, send a PUT request to: /v2/users/activate with this JSON body: {'token': 'your activation token'} "}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
