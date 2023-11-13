@@ -11,24 +11,23 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - uses: isbang/compose-action@v1.5.1
+
+            - name: Setup environment
+              run: cp .env.ci .env
+
+            - name: Build container
+              uses: isbang/compose-action@v1.5.1
               with:
                   compose-file: "./docker-compose.yml"
                   down-flags: "--volumes"
-
-            - name: Create .env for CI
-              run: cp .env.ci .env
-
-            - name: Build application with Docker Compose
-              run: docker-compose up -d
 
             - name: Set up Go
               uses: actions/setup-go@v4
               with:
                   go-version: "1.21"
 
-            - name: Build
+            - name: Build application
               run: go build -v ./...
 
-            - name: Test
+            - name: Test application
               run: go test -v ./...
