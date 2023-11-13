@@ -13,10 +13,10 @@ jobs:
             - uses: actions/checkout@v3
 
             - name: List files
-              run: ls -R
+              run: ls -a
 
             - name: Setup environment
-              run: cp .env.ci .env
+              run: cp ./.env.ci .env
 
             - name: Build container
               uses: isbang/compose-action@v1.5.1
