@@ -7,11 +7,11 @@ import (
 
 type CsvDataReader struct{}
 
-func NewCsvDataReader() *CsvDataReader {
-	return &CsvDataReader{}
+func NewCsvDataReader() CsvDataReader {
+	return CsvDataReader{}
 }
 
-func (r *CsvDataReader) ReadFile(file *os.File) ([]string, error) {
+func (r CsvDataReader) ReadFile(file *os.File) ([]string, error) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		return nil, err
