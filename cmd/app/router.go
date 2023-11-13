@@ -14,7 +14,7 @@ func (app *application) routes() http.Handler {
 
 	// v1
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
-	router.HandlerFunc(http.MethodPost, "/v1/transactions/summary", app.transactionsSummaryHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/transactions/summary", app.sendLocalTransactionsSummaryHandler)
 
 	// v2
 	router.HandlerFunc(http.MethodGet, "/v2/transactions", app.requireActivatedUser(app.listTransactionsHandler))

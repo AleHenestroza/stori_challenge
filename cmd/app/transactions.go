@@ -19,7 +19,7 @@ type emailFields struct {
 	AverageCreditAmount string
 }
 
-func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) sendLocalTransactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email string `json:"email"`
 		Name  string `json:"name"`
