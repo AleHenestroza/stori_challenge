@@ -73,7 +73,7 @@ func (t TransactionModel) GetAll(id int64) ([]*Transaction, error) {
 	}
 	defer rows.Close()
 
-	transactions := []*Transaction{}
+	var transactions []*Transaction
 
 	for rows.Next() {
 		var transaction Transaction
@@ -115,7 +115,7 @@ func (t TransactionModel) GetAllBetweenDates(id int64, dateFrom, dateTo time.Tim
 	}
 	defer rows.Close()
 
-	transactions := []*Transaction{}
+	var transactions []*Transaction
 
 	for rows.Next() {
 		var transaction Transaction

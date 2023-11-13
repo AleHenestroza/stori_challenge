@@ -3,10 +3,13 @@ package main
 import (
 	"errors"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 )
+
+const csvFile = "./txns.csv"
 
 type emailFields struct {
 	AccountName         string
@@ -16,7 +19,7 @@ type emailFields struct {
 	AverageCreditAmount string
 }
 
-func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) sendLocalTransactionsSummaryHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Email string `json:"email"`
 		Name  string `json:"name"`
@@ -28,13 +31,14 @@ func (app *application) transactionsSummaryHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	records, err := app.csvLoader.Read("./txns.csv")
+	file, err := os.Open(csvFile)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
+	defer file.Close()
 
-	transactions, err := app.parser.Parse(records)
+	transactions, err := app.parser.Parse(file)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -112,13 +116,15 @@ func (app *application) saveTransactionHandler(w http.ResponseWriter, r *http.Re
 
 func (app *application) saveTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 	user := app.contextGetUser(r)
-	rows, err := app.readCSVFile(w, r)
+
+	file, err := app.getRequestFile(w, r)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return
 	}
+	defer file.Close()
 
-	transactions, err := app.parser.Parse(rows)
+	transactions, err := app.parser.Parse(file)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
 		return

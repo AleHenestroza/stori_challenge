@@ -40,12 +40,11 @@ type smtp struct {
 }
 
 type application struct {
-	config    config
-	logger    *slog.Logger
-	csvLoader reader.CsvDataReader
-	parser    parser.TransactionParser
-	mailer    mailer.Mailer
-	models    data.Models
+	config config
+	logger *slog.Logger
+	parser parser.TransactionParser
+	mailer mailer.Mailer
+	models data.Models
 }
 
 func main() {
@@ -77,15 +76,13 @@ func main() {
 		os.Exit(1)
 	}
 	cfg.smtp = smtp
-	mailer := mailer.New(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender)
 
 	app := &application{
-		config:    cfg,
-		logger:    logger,
-		csvLoader: *reader.NewCsvDataReader(),
-		parser:    parser.NewTransactionParser(),
-		mailer:    mailer,
-		models:    data.NewModels(db),
+		config: cfg,
+		logger: logger,
+		parser: parser.NewTransactionParser(reader.NewCsvDataReader()),
+		mailer: mailer.New(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender),
+		models: data.NewModels(db),
 	}
 
 	srv := &http.Server{

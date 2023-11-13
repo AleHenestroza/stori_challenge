@@ -61,8 +61,17 @@ func NewAccountSummary(transactions []*Transaction) (AccountSummary, error) {
 	})
 
 	summary.Balance = fmt.Sprintf("%.2f", balance)
-	summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float64(credits))
-	summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float64(debits))
+	if credits > 0 {
+		summary.CreditAverage = fmt.Sprintf("%.2f", creditAmount/float64(credits))
+	} else {
+		summary.CreditAverage = "0.00"
+	}
+
+	if debits > 0 {
+		summary.DebitAverage = fmt.Sprintf("%.2f", debitAmount/float64(debits))
+	} else {
+		summary.DebitAverage = "0.00"
+	}
 
 	return summary, nil
 }
