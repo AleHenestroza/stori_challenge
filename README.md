@@ -16,7 +16,6 @@
     6. [Save transaction](#save-transaction)
     7. [Save transactions in bulk](#save-transactions-in-bulk)
     8. [Send email summary - v2](#send-email-summary---v2)
-6. [To-Do](#to-do)
 
 ## Introduction <a name="introduction"></a>
 
@@ -189,11 +188,3 @@ curl  -X POST \
 ```
 
 This endpoint works exactly as the first one, it will send an email with the account summary, but instead of reading a .csv file, it will look for all the user' transactions in the DataBase.
-
-## To-Do <a name="to-do"></a>
-
--   [x] Add Stori logo to email template
--   [x] Implement a database for storing summaries
--   [x] Allow saving monthly/account summaries to a database
--   [x] Send emails to real email accounts (by changing environment variables and using a real SMTP server, like Gmail)
--   [ ] Deploy on the cloud (AWS)
