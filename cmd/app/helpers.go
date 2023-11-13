@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -86,41 +86,22 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any
 	return nil
 }
 
-func (app *application) readCSVFile(w http.ResponseWriter, r *http.Request) ([]string, error) {
+func (app *application) getRequestFile(w http.ResponseWriter, r *http.Request) (*os.File, error) {
 	r.Body = http.MaxBytesReader(w, r.Body, MaxUploadSize)
 	err := r.ParseMultipartForm(MaxUploadSize)
 	if err != nil {
 		return nil, err
 	}
 
-	file, _, err := r.FormFile("file")
+	multipartFile, _, err := r.FormFile("file")
 	if err != nil {
 		return nil, err
 	}
 
-	reader := csv.NewReader(file)
-	var results []string
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-
-		results = append(results, strings.Join(record, ","))
+	file, ok := multipartFile.(*os.File)
+	if !ok {
+		return nil, err
 	}
-	return results, nil
+
+	return file, nil
 }
-
-// func (app *application) readIDParam(r *http.Request) (int64, error) {
-// 	params := httprouter.ParamsFromContext(r.Context())
-
-// 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-// 	if err != nil || id < 0 {
-// 		return 0, errors.New("invalid id parameter")
-// 	}
-
-// 	return id, nil
-// }
