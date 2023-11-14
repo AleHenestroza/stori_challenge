@@ -72,7 +72,7 @@ Here is a step-by-step on how to run the application:
 cp .env_example .env
 ```
 
-2. Replace the SMTP variables with your own.
+2. Replace the SMTP variables with your own. Click [here]((#setup-smtp) to see how to configure the SMTP
 3. Run the application with `docker-compose`.
 
 ```sh
