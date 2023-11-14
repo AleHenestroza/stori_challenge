@@ -56,9 +56,6 @@ docker-compose up
 > [!IMPORTANT]  
 > In some cases, MailTrap configuration will difer from inbox to inbox in more than just the username and password. In some cases, an alternative port of 25 will need to be used. Before setting the environment variables, and if using Mailtrap as the SMTP server, please double check that the host and the port are also correct.
 
-> [!WARNING]
-> In some cases, if a PostgreSQL image has already been downloaded and run, there may be a volume of data that can interfere with database initialization. In order to fix this issue, you can run `docker-compose down -v` and then `docker-compose up`.
-
 ## Continuous Integration with GitHub Actions <a name="continuous-integration-with-github-actions"></a>
 
 This repository utilizes GitHub Actions for Continuous Integration (CI) purposes. The workflow configurations are defined in the `.github/workflows/` directory, managing tasks such as code compilation, automated testing, and more.
