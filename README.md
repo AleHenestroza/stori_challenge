@@ -25,6 +25,8 @@ This app is the solution to [Stori's Backend Challenge](Tech_Challenge_-_Softwar
 
 The application was developed using [mailtrap](https://mailtrap.io). Mailtrap is a free application that allows you to test sending emails by creating a private inbox to which each email will be sent. This means that no email will actually be sent to real email addresses.
 
+For security reasons, the `SMTP_USERNAME` and `SMTP_PASSWORD` were not committed to this repository.
+
 You can create a free account and change the environment variables `SMTP_USERNAME` and `SMTP_PASSWORd` with your own credentials.
 
 Alternatively, you can use a real SMTP server (like Gmail). In order to send real emails, you should also change `SMTP_HOST`, `SMTP_PORT` and `SMTP_SENDER` with your own. In the [.env_example](.env_example) file, there is an example of how you can use Gmail SMTP server and send real emails.
