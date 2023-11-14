@@ -2,12 +2,13 @@ package parser
 
 import (
 	"fmt"
-	"github.com/alehenestroza/stori-backend-challenge/internal/reader"
-	"os"
+	"mime/multipart"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/alehenestroza/stori-backend-challenge/internal/reader"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/data"
 )
@@ -20,7 +21,7 @@ func NewTransactionParser(reader reader.DataReader) TransactionParser {
 	return TransactionParser{Reader: reader}
 }
 
-func (tp TransactionParser) Parse(file *os.File) ([]*data.Transaction, error) {
+func (tp TransactionParser) Parse(file multipart.File) ([]*data.Transaction, error) {
 	rows, err := tp.Reader.ReadFile(file)
 	if err != nil {
 		return nil, err

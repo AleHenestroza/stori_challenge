@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -86,22 +86,36 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any
 	return nil
 }
 
-func (app *application) getRequestFile(w http.ResponseWriter, r *http.Request) (*os.File, error) {
+func (app *application) getRequestFile(w http.ResponseWriter, r *http.Request) (multipart.File, error) {
 	r.Body = http.MaxBytesReader(w, r.Body, MaxUploadSize)
 	err := r.ParseMultipartForm(MaxUploadSize)
 	if err != nil {
+		app.logger.Error("Failed parsing multipart form", err)
 		return nil, err
 	}
 
 	multipartFile, _, err := r.FormFile("file")
 	if err != nil {
+		app.logger.Error("Failed getting the form file", err)
 		return nil, err
 	}
 
-	file, ok := multipartFile.(*os.File)
-	if !ok {
-		return nil, err
-	}
+	return multipartFile, nil
+}
 
-	return file, nil
+func (app *application) background(fn func()) {
+	app.wg.Add(1)
+
+	go func() {
+
+		defer app.wg.Done()
+
+		defer func() {
+			if err := recover(); err != nil {
+				app.logger.Error(fmt.Sprintf("%v", err))
+			}
+		}()
+
+		fn()
+	}()
 }

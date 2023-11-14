@@ -1,7 +1,7 @@
 package reader
 
-import "os"
+import "mime/multipart"
 
 type DataReader interface {
-	ReadFile(file *os.File) ([]string, error)
+	ReadFile(file multipart.File) ([]string, error)
 }

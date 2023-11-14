@@ -50,17 +50,21 @@ func (app *application) sendLocalTransactionsSummaryHandler(w http.ResponseWrite
 		return
 	}
 
-	err = app.mailer.Send(input.Email, "account_summary.tmpl", emailFields{
-		AccountName:         input.Name,
-		TotalBalance:        summary.Balance,
-		AccountSummary:      summary,
-		AverageDebitAmount:  summary.DebitAverage,
-		AverageCreditAmount: summary.CreditAverage,
+	app.background(func() {
+		data := emailFields{
+			AccountName:         input.Name,
+			TotalBalance:        summary.Balance,
+			AccountSummary:      summary,
+			AverageDebitAmount:  summary.DebitAverage,
+			AverageCreditAmount: summary.CreditAverage,
+		}
+
+		err = app.mailer.Send(input.Email, "account_summary.tmpl", data)
+
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+		}
 	})
-	if err != nil {
-		app.serverErrorResponse(w, r, err)
-		return
-	}
 
 	w.WriteHeader(http.StatusAccepted)
 }
@@ -122,7 +126,6 @@ func (app *application) saveTransactionsHandler(w http.ResponseWriter, r *http.R
 		app.badRequestResponse(w, r, err)
 		return
 	}
-	defer file.Close()
 
 	transactions, err := app.parser.Parse(file)
 	if err != nil {
@@ -157,17 +160,21 @@ func (app *application) sendTransactionsSummaryHandler(w http.ResponseWriter, r 
 		return
 	}
 
-	err = app.mailer.Send(user.Email, "account_summary.tmpl", emailFields{
-		AccountName:         user.Name,
-		TotalBalance:        accountSummary.Balance,
-		AccountSummary:      accountSummary,
-		AverageDebitAmount:  accountSummary.DebitAverage,
-		AverageCreditAmount: accountSummary.CreditAverage,
+	app.background(func() {
+		data := emailFields{
+			AccountName:         user.Name,
+			TotalBalance:        accountSummary.Balance,
+			AccountSummary:      accountSummary,
+			AverageDebitAmount:  accountSummary.DebitAverage,
+			AverageCreditAmount: accountSummary.CreditAverage,
+		}
+
+		err = app.mailer.Send(user.Email, "account_summary.tmpl", data)
+
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+		}
 	})
-	if err != nil {
-		app.serverErrorResponse(w, r, err)
-		return
-	}
 
 	w.WriteHeader(http.StatusAccepted)
 }

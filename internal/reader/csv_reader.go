@@ -1,7 +1,9 @@
 package reader
 
 import (
-	"os"
+	"encoding/csv"
+	"io"
+	"mime/multipart"
 	"strings"
 )
 
@@ -11,19 +13,20 @@ func NewCsvDataReader() CsvDataReader {
 	return CsvDataReader{}
 }
 
-func (r CsvDataReader) ReadFile(file *os.File) ([]string, error) {
-	fileInfo, err := file.Stat()
-	if err != nil {
-		return nil, err
+func (r CsvDataReader) ReadFile(file multipart.File) ([]string, error) {
+	reader := csv.NewReader(file)
+	var rows []string
+	for {
+		row, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		rows = append(rows, strings.Join(row, ","))
 	}
 
-	buf := make([]byte, fileInfo.Size())
-	_, err = file.Read(buf)
-	if err != nil {
-		return nil, err
-	}
-
-	text := string(buf)
-	rows := strings.Split(text, "\n")
 	return rows, nil
 }
