@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "d5debe28-d226-4ff2-9b16-090471cbba06",
+        "_postman_id": "eb3e9120-96f4-4882-ad55-6ed2dda55e8e",
         "name": "Stori Challenge",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -55,7 +55,7 @@
                     "bearer": [
                         {
                             "key": "token",
-                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "value": "PQ37XX6YRN7DAMNTALUB2BDSVM",
                             "type": "string"
                         }
                     ]
@@ -93,7 +93,7 @@
         {
             "name": "Activate user",
             "request": {
-                "method": "POST",
+                "method": "PUT",
                 "url": {
                     "raw": "http://localhost:4000/v2/users/activate",
                     "path": [
@@ -114,7 +114,7 @@
                             "language": "json"
                         }
                     },
-                    "raw": "{\n  \"token\": \"JMEXK44ITK7WIVGEMDIXZYQOPY\"\n}"
+                    "raw": "{\n  \"token\": \"JTB4OS3PKBFEKPW7XXVV6MNWMQ\"\n}"
                 }
             }
         },
@@ -176,7 +176,7 @@
                     "bearer": [
                         {
                             "key": "token",
-                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "value": "PQ37XX6YRN7DAMNTALUB2BDSVM",
                             "type": "string"
                         }
                     ]
@@ -215,7 +215,7 @@
                     "bearer": [
                         {
                             "key": "token",
-                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "value": "PQ37XX6YRN7DAMNTALUB2BDSVM",
                             "type": "string"
                         }
                     ]
@@ -244,7 +244,7 @@
                     "bearer": [
                         {
                             "key": "token",
-                            "value": "JCB5JYNLXFTUGLQ437NFO3NPLY",
+                            "value": "PQ37XX6YRN7DAMNTALUB2BDSVM",
                             "type": "string"
                         }
                     ]
@@ -275,7 +275,7 @@
                             "language": "json"
                         }
                     },
-                    "raw": "{\n  \"email\": \"username@email.com\"\n}"
+                    "raw": "{\n  \"email\": \"alehenestroza@gmail.com\"\n}"
                 }
             }
         }
