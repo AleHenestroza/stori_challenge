@@ -6,9 +6,9 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/alehenestroza/stori-backend-challenge/internal/data"
@@ -45,6 +45,7 @@ type application struct {
 	parser parser.TransactionParser
 	mailer mailer.Mailer
 	models data.Models
+	wg     sync.WaitGroup
 }
 
 func main() {
@@ -85,19 +86,11 @@ func main() {
 		models: data.NewModels(db),
 	}
 
-	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
+	err = app.serve()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
-
-	logger.Info("starting server", "addr", srv.Addr, "env", cfg.env)
-	err = srv.ListenAndServe()
-	logger.Error(err.Error())
-	os.Exit(1)
 }
 
 func buildSmtpStruct() (smtp, error) {
