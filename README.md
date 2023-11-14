@@ -29,6 +29,11 @@ You can create a free account and change the environment variables `SMTP_USERNAM
 
 Alternatively, you can use a real SMTP server (like Gmail). In order to send real emails, you should also change `SMTP_HOST`, `SMTP_PORT` and `SMTP_SENDER` with your own. In the [.env_example](.env_example) file, there is an example of how you can use Gmail SMTP server and send real emails.
 
+Step-by-step instructions can be found using the following links:
+
+-   [Mailtrap](smtp_setup/mailtrap.md)
+-   [Gmail](smtp_setup/gmail.md)
+
 > [!NOTE]
 > If using Gmail as your SMTP server, please make sure you have read [this article](https://support.google.com/accounts/answer/185833). In it, it is explained how to generate an app password. Regular passwords (the one used for logins) won't work.
 
