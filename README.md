@@ -4,10 +4,12 @@
 
 1. [Introduction](#introduction)
 2. [SMTP](#smtp)
+    1. [Setup the SMTP server](#setup-smtp)
 3. [Run the application](#run-the-application)
-4. [Continuous Integration with GitHub Actions](#continuous-integration-with-github-actions)
+4. [Step by Step](#step-by-step)
+5. [Continuous Integration with GitHub Actions](#continuous-integration-with-github-actions)
     1. [Key Workflow Steps](#key-workflow-steps)
-5. [Endpoints](#endpoints)
+6. [Endpoints](#endpoints)
     1. [Send summary from local .csv file](#send-summary-from-local-csv-file)
     2. [Register user](#register-user)
     3. [Activate user](#activate-user)
@@ -31,13 +33,15 @@ You can create a free account and change the environment variables `SMTP_USERNAM
 
 Alternatively, you can use a real SMTP server (like Gmail). In order to send real emails, you should also change `SMTP_HOST`, `SMTP_PORT` and `SMTP_SENDER` with your own. In the [.env_example](.env_example) file, there is an example of how you can use Gmail SMTP server and send real emails.
 
+> [!NOTE]
+> If using Gmail as your SMTP server, please make sure you have read [this article](https://support.google.com/accounts/answer/185833). In it, it is explained how to generate an app password. Regular passwords (the one used for logins) won't work.
+
+### Setup the SMTP server <a name="setup-smtp"></a>
+
 Step-by-step instructions can be found using the following links:
 
 -   [Mailtrap](smtp_setup/mailtrap.md)
 -   [Gmail](smtp_setup/gmail.md)
-
-> [!NOTE]
-> If using Gmail as your SMTP server, please make sure you have read [this article](https://support.google.com/accounts/answer/185833). In it, it is explained how to generate an app password. Regular passwords (the one used for logins) won't work.
 
 ## Run the application <a name="run-the-application"></a>
 
@@ -57,6 +61,23 @@ docker-compose up
 
 > [!IMPORTANT]  
 > In some cases, MailTrap configuration will difer from inbox to inbox in more than just the username and password. In some cases, an alternative port of 25 will need to be used. Before setting the environment variables, and if using Mailtrap as the SMTP server, please double check that the host and the port are also correct.
+
+## Step by Step <a name="step-by-step"></a>
+
+Here is a step-by-step on how to run the application:
+
+1. Generate the `.env` file. You can use the following command:
+
+```sh
+cp .env_example .env
+```
+
+2. Replace the SMTP variables with your own.
+3. Run the application with `docker-compose`.
+
+```sh
+docker-compose up --build
+```
 
 ## Continuous Integration with GitHub Actions <a name="continuous-integration-with-github-actions"></a>
 
