@@ -85,17 +85,17 @@ This repository utilizes GitHub Actions for Continuous Integration (CI) purposes
 
 ### Key Workflow Steps <a name="key-workflow-steps"></a>
 
-1. **Checkout Code (checkout.yml):** This step ensures that the latest code from the main branch is pulled into the CI environment.
+1. **Checkout Code:** This step ensures that the latest code from the main branch is pulled into the CI environment.
 
-2. **Environment Setup (go.yml):** Copies the `.env-ci` file to `.env` for configuring the environment variables needed during the build and test processes.
+2. **Environment Setup:** Copies the `.env-ci` file to `.env` for configuring the environment variables needed during the build and test processes.
 
-3. **Build Container (docker-compose.yml):** Uses the [isbang/compose-action](https://github.com/isbang/compose-action) action to build the Docker containers defined in the `docker-compose.yml` file. The `--volumes` flag ensures that any associated volumes are removed during the process.
+3. **Build Container:** Uses the [isbang/compose-action](https://github.com/isbang/compose-action) action to build the Docker containers defined in the `docker-compose.yml` file. The `--volumes` flag ensures that any associated volumes are removed during the process.
 
-4. **Set Up Go (go.yml):** Configures the Go runtime environment using the [actions/setup-go](https://github.com/actions/setup-go) action with Go version 1.21.
+4. **Set Up Go:** Configures the Go runtime environment using the [actions/setup-go](https://github.com/actions/setup-go) action with Go version 1.21.
 
-5. **Build Application (go.yml):** Compiles the Go application using the `go build` command, ensuring a verbose output for detailed build information.
+5. **Build Application:** Compiles the Go application using the `go build` command, ensuring a verbose output for detailed build information.
 
-6. **Test Application (go.yml):** Executes the `go test` command to run the suite of tests associated with the Go application, providing verbose output for comprehensive test results.
+6. **Test Application:** Executes the `go test` command to run the suite of tests associated with the Go application, providing verbose output for comprehensive test results.
 
 ## Endpoints <a name="endpoints">
 
