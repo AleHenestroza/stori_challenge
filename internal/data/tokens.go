@@ -14,6 +14,7 @@ import (
 const (
 	ScopeActivation     = "activation"
 	ScopeAuthentication = "authentication"
+	ScopeUnblock        = "unblock"
 	// TODO: Implement -> ScopePasswordReset  = "password-reset"
 )
 
